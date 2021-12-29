@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -59,6 +58,7 @@ class Ui_MainWindow(object):
 "color: rgb(0, 85, 255);\n"
 "background-color: rgb(223, 255, 10);")
         self.LoginButton.setObjectName("LoginButton")
+        self.LoginButton.clicked.connect(self.login())
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -78,6 +78,10 @@ class Ui_MainWindow(object):
         self.LoginScreenLabel.setText(_translate("MainWindow", "Giriş Ekranı"))
         self.LoginButton.setText(_translate("MainWindow", "Giriş"))
 
+    def login(self):
+        email = self.usernameInput.text()
+        password = self.passwordInput.text()
+        print("done")
 
 if __name__ == "__main__":
     import sys
