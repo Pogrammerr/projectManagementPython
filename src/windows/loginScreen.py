@@ -9,18 +9,43 @@
 
 
 import json
-from logging import error
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
+from firebase_admin import credentials, firestore, storage
+import firebase_admin
 import pyrebase
-import requests
 from requests.models import HTTPError
-from config.firebase import firebaseConfig
-from windows.openWindow import openWindow
+from config.firebase import getFirebaseConfig
+from functions.getUserInfo import getUserInfo
+from windows.adminWindow import Ui_AdminWindow
+from windows.signUpWindow import Ui_SignUpWindow
+from windows.developer import Ui_DevWindow
 
-firebase = pyrebase.initialize_app(firebaseConfig)
+firebase = pyrebase.initialize_app(getFirebaseConfig())
 auth = firebase.auth()
 
+cred = credentials.Certificate('src/config/key.json')
+app = firebase_admin.initialize_app(cred, { 'storageBucket' : 'task-management-python.appspot.com' })
+db = firestore.client()
+
 class Ui_MainWindow(object):
+    def openDevWindow(self, userInfo):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_DevWindow()
+        self.ui.setupUi(self.window, userInfo, storage, db)
+        self.window.show()
+
+    def openSignUpWindow(self, event):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_SignUpWindow()
+        self.ui.setupUi(self.window, auth, db)
+        self.window.show()
+
+    def openAdminWindow(self, userInfo):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_AdminWindow()
+        self.ui.setupUi(self.window, userInfo)
+        self.window.show()
+
     def setupUi(self, MainWindow):
 
         MainWindow.setFixedSize(975, 600)
@@ -34,6 +59,7 @@ class Ui_MainWindow(object):
 
         self.passwordInput = QtWidgets.QLineEdit(self.centralwidget)
         self.passwordInput.setGeometry(QtCore.QRect(520, 320, 221, 31))
+        self.passwordInput.setEchoMode(QtWidgets.QLineEdit.Password)
 
         self.UsernameLabel = QtWidgets.QLabel(self.centralwidget)
         self.UsernameLabel.setGeometry(QtCore.QRect(220, 260, 251, 31))
@@ -55,6 +81,8 @@ class Ui_MainWindow(object):
         self.SignUpDirectionLabel.setText("Buraya")
         self.SignUpDirectionLabel.setStyleSheet("color: rgb(0, 85, 255);\n" "text-decoration: underline;")
         self.SignUpDirectionLabel.setCursor(QtCore.Qt.PointingHandCursor)
+
+        # Opening the sign up window after clicking "don't have account" label.
         self.SignUpDirectionLabel.mousePressEvent = self.openSignUpWindow
 
         self.DontHaveAccountLabel2 = QtWidgets.QLabel(self.centralwidget)
@@ -89,12 +117,17 @@ class Ui_MainWindow(object):
         email = self.usernameInput.text()
         password = self.passwordInput.text()
         try:
-                print(auth.sign_in_with_email_and_password(email, password))
+                auth.sign_in_with_email_and_password(email, password)
+                username = email.replace("@gmail.com", "")
+                userInfo = getUserInfo(db, username)
+
+                # If the logged user is "yonetici", opens the administrator window. Else, opens the developer window.
+                if(userInfo["Admin"]):
+                        self.openAdminWindow(userInfo)
+                else:
+                        self.openDevWindow(userInfo)
         except HTTPError as e:
-                print("failed")
+                print("login failed")
                 self.InvalidInfoLabel.setText("Hata: " + json.loads(e.args[1])["error"]["message"])
                 self.InvalidInfoLabel.setVisible(True)
         print("done")
-
-    def openSignUpWindow(self, event):
-            print(event)

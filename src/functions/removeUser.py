@@ -2,14 +2,14 @@ from firebase_admin import firestore
 from pyrebase.pyrebase import Database
 
 
-def rejectInvitation(db: Database, invitation, adminUsername, devUsername):
+def removeUser(db: Database, adminUsername, devUsername):
   collectionUsers = db.collection("users")
   documentAdmin = collectionUsers.document(adminUsername)
   documentDev = collectionUsers.document(devUsername)
 
   documentAdmin.update({
-    "Invitations": firestore.ArrayRemove([invitation])
+    "Users": firestore.ArrayRemove([devUsername])
   })
   documentDev.update({
-    "Invitations": firestore.ArrayRemove([invitation])
+    "Users": firestore.ArrayRemove([adminUsername])
   })

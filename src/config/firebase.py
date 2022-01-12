@@ -8,3 +8,6 @@ firebaseConfig = {
   "appId": "1:437766074985:web:478d373ba82de668d328f8",
   "measurementId": "G-XVVE0HJB02"
 }
+
+def getFirebaseConfig():
+  return firebaseConfig
