@@ -9,10 +9,8 @@
 
 
 import json
-import pyrebase
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyrebase.pyrebase import Auth, Database
-from firebase_admin import firestore
 from requests.models import HTTPError
 
 class Ui_SignUpWindow(object):

@@ -9,10 +9,32 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pyrebase.pyrebase import Database
+from UIcomponents.taskAdmin import Ui_TaskAdminFrame
+from UIcomponents.user import Ui_UserFrame
+
+from functions.inviteUser import inviteUser
 
 
 class Ui_AdminWindow(object):
-    def setupUi(self, MainWindow, userInfo):
+    def addTaskToLayout(self, task, db):
+        self.TaskFrame = QtWidgets.QFrame(self.ActiveTasksLayoutWidget)
+        Ui_TaskAdminFrame().setupUi(self.TaskFrame, task, db)
+        self.ActiveTasksLayout.addWidget(self.TaskFrame)
+    
+    def sendInvite(self, db, details, adminUsername, devUsername):
+        self.InvitationStatusLabel.setVisible(False)
+        invitationStatus = inviteUser(db, details, adminUsername, devUsername)
+        self.InvitationStatusLabel.setVisible(True)
+        if invitationStatus:
+            self.InvitationStatusLabel.setStyleSheet("color: rgb(0, 255, 0);")
+            self.InvitationStatusLabel.setText("Basarili!")
+        else:
+            self.InvitationStatusLabel.setStyleSheet("color: rgb(255, 0, 0);")
+            self.InvitationStatusLabel.setText("Hata Oluştu.")
+
+
+    def setupUi(self, MainWindow, userInfo, db: Database):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(800, 600)
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 127);")
@@ -48,6 +70,11 @@ class Ui_AdminWindow(object):
         self.InviteUserButton.setGeometry(QtCore.QRect(280, 200, 101, 21))
         self.InviteUserButton.setStyleSheet("background-color: rgb(180, 230, 200);")
         self.InviteUserButton.setObjectName("InviteUserButton")
+        self.InviteUserButton.clicked.connect(lambda: self.sendInvite(db, self.DetailsInput.toPlainText(), userInfo["Username"], self.UsernameInput.text()))
+
+        self.InvitationStatusLabel = QtWidgets.QLabel(self.centralwidget)
+        self.InvitationStatusLabel.setGeometry(QtCore.QRect(315, 230, 100, 20))
+        self.InvitationStatusLabel.setVisible(False)
 
         self.UsersLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.UsersLayoutWidget.setGeometry(QtCore.QRect(30, 270, 301, 291))
@@ -55,6 +82,11 @@ class Ui_AdminWindow(object):
         self.UsersLayout = QtWidgets.QVBoxLayout(self.UsersLayoutWidget)
         self.UsersLayout.setContentsMargins(0, 0, 0, 0)
         self.UsersLayout.setObjectName("UsersLayout")
+
+        for devUsername in userInfo["Users"]:
+            self.UserFrame = QtWidgets.QFrame(self.UsersLayoutWidget)
+            Ui_UserFrame().setupUi(self.UserFrame, userInfo["Username"], devUsername, db, self.addTaskToLayout)
+            self.UsersLayout.addWidget(self.UserFrame)
 
         self.UsersLabel = QtWidgets.QLabel(self.centralwidget)
         self.UsersLabel.setGeometry(QtCore.QRect(110, 130, 141, 31))
@@ -81,6 +113,9 @@ class Ui_AdminWindow(object):
         self.ActiveTasksLayout.setContentsMargins(0, 0, 0, 0)
         self.ActiveTasksLayout.setObjectName("ActiveTasksLayout")
 
+        for task in userInfo["Tasks"]:
+            self.addTaskToLayout(task, db)
+
         self.DetailsInput = QtWidgets.QTextEdit(self.centralwidget)
         self.DetailsInput.setGeometry(QtCore.QRect(110, 210, 161, 41))
         self.DetailsInput.setObjectName("DetailsInput")
@@ -105,7 +140,6 @@ class Ui_AdminWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow, username):
-        print(username)
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.ProfileTextLabel.setText(_translate("MainWindow", "Hoşgeldiniz, " + username))

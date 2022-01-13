@@ -27,6 +27,7 @@ def removeTask(db: Database, task, adminUsername, devUsername):
     })
   except:
     print("Task not found!")
+    return 0
 
   return 1
     

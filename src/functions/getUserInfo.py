@@ -1,4 +1,3 @@
-from firebase_admin import firestore
 from pyrebase.pyrebase import Database
 
 # User = {
@@ -7,7 +6,7 @@ from pyrebase.pyrebase import Database
 #   Invitations: [{From: admin, To: dev, Details: "Come"}],
 #   KullaniciAdi: "fdsjkf",
 #   Sifre: "123456",
-#   Tasks: [{PLEASE LOOK AT addTask.py FOR TASK TYPE}],
+#   Tasks: [PLEASE LOOK AT addTask.py FOR TASK TYPE],
 #   Users: [],
 #   Yonetici: False
 # }

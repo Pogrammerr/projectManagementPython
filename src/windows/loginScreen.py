@@ -43,7 +43,7 @@ class Ui_MainWindow(object):
     def openAdminWindow(self, userInfo):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_AdminWindow()
-        self.ui.setupUi(self.window, userInfo)
+        self.ui.setupUi(self.window, userInfo, db)
         self.window.show()
 
     def setupUi(self, MainWindow):
@@ -116,12 +116,12 @@ class Ui_MainWindow(object):
     def login(self):
         email = self.usernameInput.text()
         password = self.passwordInput.text()
+        username = email.replace("@gmail.com", "")
         try:
                 auth.sign_in_with_email_and_password(email, password)
-                username = email.replace("@gmail.com", "")
                 userInfo = getUserInfo(db, username)
 
-                # If the logged user is "yonetici", opens the administrator window. Else, opens the developer window.
+                # If the logged user is admin, opens the administrator window. Else, opens the developer window.
                 if(userInfo["Admin"]):
                         self.openAdminWindow(userInfo)
                 else:
@@ -130,4 +130,4 @@ class Ui_MainWindow(object):
                 print("login failed")
                 self.InvalidInfoLabel.setText("Hata: " + json.loads(e.args[1])["error"]["message"])
                 self.InvalidInfoLabel.setVisible(True)
-        print("done")
+        print(username + " olarak giris yapildi.")

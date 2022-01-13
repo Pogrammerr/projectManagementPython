@@ -10,19 +10,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyrebase.pyrebase import Database, Storage
+from UIcomponents.invitation import Ui_InvitationFrame
 from UIcomponents.taskDev import Ui_TaskDevFrame
-
-from functions.getUserInfo import getUserInfo
-from functions.uploadFile import uploadFile
-import webbrowser
 
 
 class Ui_DevWindow(object):
-    def openURLs(self, urlArray):
-            chromePath = 'C:/Program Files/Google/Chrome/Application/chrome.exe %s'
-            for url in urlArray:
-                    webbrowser.get(chromePath).open(url, new=2)
-                    print("opened a new browser window!")
     def setupUi(self, MainWindow, userInfo, storage: Storage, db: Database):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(800, 600)
@@ -67,60 +59,9 @@ class Ui_DevWindow(object):
         self.TasksLayout.setObjectName("TasksLayout")
 
         for task in userInfo["Tasks"]:
-                self.TaskFrame = QtWidgets.QFrame(self.verticalLayoutWidget)
-                self.TaskFrame.setMaximumSize(QtCore.QSize(16777215, 100))
-                self.TaskFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-                self.TaskFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-                self.TaskFrame.setObjectName("TaskFrame")
-
-                self.line_5 = QtWidgets.QFrame(self.TaskFrame)
-                self.line_5.setGeometry(QtCore.QRect(0, 90, 399, 3))
-                self.line_5.setFrameShape(QtWidgets.QFrame.HLine)
-                self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
-                self.line_5.setObjectName("line_5")
-
-                self.FromLabel = QtWidgets.QLabel(self.TaskFrame)
-                self.FromLabel.setGeometry(QtCore.QRect(10, 0, 191, 21))
-                self.FromLabel.setObjectName("FromLabel")
-                self.FromLabel.setText(" Kimden: " + task["From"])
-
-                self.UploadFileButton = QtWidgets.QPushButton(self.TaskFrame)
-                self.UploadFileButton.setGeometry(QtCore.QRect(270, 10, 101, 23))
-                self.UploadFileButton.setStyleSheet("background-color: rgb(230, 230, 250);")
-                self.UploadFileButton.setObjectName("UploadFileButton")
-                self.UploadFileButton.setText("Dosya Yükle...")
-                self.UploadFileButton.clicked.connect(lambda: uploadFile(task, storage, db))
-
-                self.StatusLabel = QtWidgets.QLabel(self.TaskFrame)
-                self.StatusLabel.setGeometry(QtCore.QRect(270, 40, 101, 16))
-                self.StatusLabel.setObjectName("StatusLabel")
-                self.StatusLabel.setText("Durum: " + task["TaskStatus"])
-
-                self.DeadlineLabel = QtWidgets.QLabel(self.TaskFrame)
-                self.DeadlineLabel.setGeometry(QtCore.QRect(10, 60, 151, 16))
-                self.DeadlineLabel.setObjectName("DeadlineLabel")
-                self.DeadlineLabel.setText("Son Teslim Tarihi: " + task["TaskDeadline"])
-
-                self.UploadedFilesLabel = QtWidgets.QLabel(self.TaskFrame)
-                self.UploadedFilesLabel.setGeometry(QtCore.QRect(260, 60, 111, 16))
-                self.UploadedFilesLabel.setStyleSheet("text-decoration: underline;\n"
-                        "color: rgb(0, 80, 255);")
-                self.UploadedFilesLabel.setObjectName("UploadedFilesLabel")
-                self.UploadedFilesLabel.setText("Yüklenen Dosyaları Gör")
-                self.UploadedFilesLabel.setVisible(False)
-
-                if(task["TaskStatus"] == "Tamamlandı"):
-                        self.UploadedFilesLabel.setVisible(True)
-                        print(task["TaskFileURLs"])
-                        self.UploadedFilesLabel.mousePressEvent = lambda x: self.openURLs(task["TaskFileURLs"])
-
-                self.DetailsLabel = QtWidgets.QLabel(self.TaskFrame)
-                self.DetailsLabel.setGeometry(QtCore.QRect(10, 20, 191, 41))
-                self.DetailsLabel.setWordWrap(True)
-                self.DetailsLabel.setObjectName("DetailsLabel")
-                self.DetailsLabel.setText(" Açıklama: " + task["TaskDetails"])
-
-                self.TasksLayout.addWidget(self.TaskFrame)
+            self.TaskFrame = QtWidgets.QFrame(self.verticalLayoutWidget)
+            Ui_TaskDevFrame().setupUi(self.TaskFrame, task, storage, db)
+            self.TasksLayout.addWidget(self.TaskFrame)
         
         self.InvitationsLabel1 = QtWidgets.QLabel(self.centralwidget)
         self.InvitationsLabel1.setGeometry(QtCore.QRect(560, 110, 111, 31))
@@ -142,41 +83,9 @@ class Ui_DevWindow(object):
         self.InvitationsLayout.setObjectName("InvitationsLayout")
 
         for invitation in userInfo["Invitations"]:
-                self.InvitationFrame = QtWidgets.QFrame(self.verticalLayoutWidget_2)
-                self.InvitationFrame.setMaximumSize(QtCore.QSize(16777215, 100))
-                self.InvitationFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-                self.InvitationFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-                self.InvitationFrame.setObjectName("InvitationFrame")
-
-                self.FromLabel = QtWidgets.QLabel(self.InvitationFrame)
-                self.FromLabel.setGeometry(QtCore.QRect(20, 10, 141, 21))
-                self.FromLabel.setObjectName("FromLabel")
-                self.FromLabel.setText("Kimden: " + invitation["From"])
-
-                self.DetailsLabel = QtWidgets.QLabel(self.InvitationFrame)
-                self.DetailsLabel.setGeometry(QtCore.QRect(20, 30, 151, 41))
-                self.DetailsLabel.setWordWrap(True)
-                self.DetailsLabel.setObjectName("DetailsLabel")
-                self.DetailsLabel.setText("Açıklama: " + invitation["Details"])
-
-                self.line_7 = QtWidgets.QFrame(self.InvitationFrame)
-                self.line_7.setGeometry(QtCore.QRect(0, 70, 269, 3))
-                self.line_7.setFrameShape(QtWidgets.QFrame.HLine)
-                self.line_7.setFrameShadow(QtWidgets.QFrame.Sunken)
-                self.line_7.setObjectName("line_7")
-
-                self.AcceptButton = QtWidgets.QPushButton(self.InvitationFrame)
-                self.AcceptButton.setGeometry(QtCore.QRect(170, 10, 75, 23))
-                self.AcceptButton.setObjectName("AcceptButton")
-                self.AcceptButton.setText("Kabul Et")
-
-                self.RejectButton = QtWidgets.QPushButton(self.InvitationFrame)
-                self.RejectButton.setGeometry(QtCore.QRect(170, 40, 75, 23))
-                self.RejectButton.setObjectName("RejectButton")
-                self.RejectButton.setText("Reddet")
-
-                self.InvitationsLayout.addWidget(self.InvitationFrame)
-
+            self.InvitationFrame = QtWidgets.QFrame(self.verticalLayoutWidget_2)
+            Ui_InvitationFrame().setupUi(self.InvitationFrame, invitation, db)
+            self.InvitationsLayout.addWidget(self.InvitationFrame)
 
         self.TaskerrLabel = QtWidgets.QLabel(self.centralwidget)
         self.TaskerrLabel.setGeometry(QtCore.QRect(480, 20, 231, 51))

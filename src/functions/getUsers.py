@@ -1,4 +1,3 @@
-from firebase_admin import firestore
 from pyrebase.pyrebase import Database
 
 

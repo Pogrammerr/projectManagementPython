@@ -1,4 +1,3 @@
-from logging import error
 from tkinter import filedialog
 import tkinter
 from firebase_admin import firestore
@@ -14,19 +13,20 @@ def uploadFile(task, storage: Storage, db: Database):
     root.withdraw()
     # Prompting the user to choose files to upload.
     filePaths = filedialog.askopenfiles(initialdir='/',  title="Select file(s)")
+    if not filePaths:
+      print("No File Chosen.")
+      return 0
 
     # Uploading each chosen file to Firebase Storage.
+    taskFileUrls = task["TaskFileURLs"].copy()
     for filePath in filePaths:
       file = open(filePath.name, 'r')
       fileName = file.name.split("/")[-1]
       bucket = storage.bucket()
-      print(bucket)
-      blob = bucket.blob(task["TaskName"] + '/' + fileName)
+      blob = bucket.blob(str(task["TaskId"]) + '/' + fileName)
       blob.upload_from_filename(filePath.name)
       blob.make_public()
-      task["TaskFileURLs"].append(blob.public_url)
-
-      print("fileUrl", blob.public_url)
+      taskFileUrls.append(blob.public_url)
     
     # Declaring a newTask dict to replace the oldTask.
     newTask = {
@@ -37,7 +37,7 @@ def uploadFile(task, storage: Storage, db: Database):
       "TaskStatus": "Tamamlandı",
       "From" : task["From"],
       "To": task["To"],
-      "TaskFileURLs": task["TaskFileURLs"],
+      "TaskFileURLs": taskFileUrls,
     }
     
     # Updating the oldTask with the newTask
@@ -53,3 +53,6 @@ def uploadFile(task, storage: Storage, db: Database):
 
   except Error as e:
     print("Error occured while uploading file.", e)
+    return 0
+
+  return newTask
