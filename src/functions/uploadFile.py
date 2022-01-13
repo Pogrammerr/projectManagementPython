@@ -3,11 +3,11 @@ import tkinter
 from firebase_admin import firestore
 from oauth2client.client import Error
 from pyrebase.pyrebase import Database, Storage
+from functions.getUserInfo import getUserInfo
 
 from functions.updateTask import updateTask
 
-def uploadFile(task, storage: Storage, db: Database):
-  print(task)
+def uploadFile(task, storage: Storage, db: Database, updateTamamlananGorevSayisi):
   try:
     root = tkinter.Tk()
     root.withdraw()
@@ -50,6 +50,8 @@ def uploadFile(task, storage: Storage, db: Database):
     db.collection("users").document(task["From"]).update({
       "CompletedTaskAmount": firestore.Increment(1),
     })
+
+    updateTamamlananGorevSayisi(getUserInfo(db, task["To"])["CompletedTaskAmount"])
 
   except Error as e:
     print("Error occured while uploading file.", e)

@@ -1,6 +1,8 @@
 from firebase_admin import firestore
 from pyrebase.pyrebase import Database
 
+from functions.getInvitations import getInvitations
+
 
 def acceptInvitation(db: Database, invitation):
   collectionUsers = db.collection("users")
@@ -23,6 +25,6 @@ def acceptInvitation(db: Database, invitation):
     })
   except Exception as e:
     print("Hata olustu: ", e)
-    return 0
+    return
 
-  return 1
+  return len(getInvitations(db, invitation["To"]))

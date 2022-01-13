@@ -48,36 +48,36 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
 
-        MainWindow.setFixedSize(975, 600)
+        MainWindow.setFixedSize(800, 600)
         MainWindow.setWindowTitle("Login Screen")
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 127);")
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
 
         self.usernameInput = QtWidgets.QLineEdit(self.centralwidget)
-        self.usernameInput.setGeometry(QtCore.QRect(520, 260, 221, 31))
+        self.usernameInput.setGeometry(QtCore.QRect(370, 260, 221, 31))
 
         self.passwordInput = QtWidgets.QLineEdit(self.centralwidget)
-        self.passwordInput.setGeometry(QtCore.QRect(520, 320, 221, 31))
+        self.passwordInput.setGeometry(QtCore.QRect(370, 320, 221, 31))
         self.passwordInput.setEchoMode(QtWidgets.QLineEdit.Password)
 
         self.UsernameLabel = QtWidgets.QLabel(self.centralwidget)
-        self.UsernameLabel.setGeometry(QtCore.QRect(220, 260, 251, 31))
-        self.UsernameLabel.setText("Kullanıcı Adı / Email:")
+        self.UsernameLabel.setGeometry(QtCore.QRect(250, 260, 75, 31))
+        self.UsernameLabel.setText("Email:")
         self.UsernameLabel.setStyleSheet("color: rgb(0, 85, 255);\n" "font-size: 28px;")
 
         self.PasswordLabel = QtWidgets.QLabel(self.centralwidget)
-        self.PasswordLabel.setGeometry(QtCore.QRect(410, 310, 71, 41))
+        self.PasswordLabel.setGeometry(QtCore.QRect(260, 310, 71, 41))
         self.PasswordLabel.setText("Şifre:")
         self.PasswordLabel.setStyleSheet("color: rgb(0, 85, 255);\n"
 "font-size: 28px;")
 
         self.DontHaveAccountLabel1 = QtWidgets.QLabel(self.centralwidget)
         self.DontHaveAccountLabel1.setText("Hesabınız yok mu? ")
-        self.DontHaveAccountLabel1.setGeometry(QtCore.QRect(350, 470, 91, 16))
+        self.DontHaveAccountLabel1.setGeometry(QtCore.QRect(300, 470, 91, 16))
 
         self.SignUpDirectionLabel = QtWidgets.QLabel(self.centralwidget)
-        self.SignUpDirectionLabel.setGeometry(QtCore.QRect(440, 470, 41, 16))
+        self.SignUpDirectionLabel.setGeometry(QtCore.QRect(390, 470, 41, 16))
         self.SignUpDirectionLabel.setText("Buraya")
         self.SignUpDirectionLabel.setStyleSheet("color: rgb(0, 85, 255);\n" "text-decoration: underline;")
         self.SignUpDirectionLabel.setCursor(QtCore.Qt.PointingHandCursor)
@@ -86,23 +86,23 @@ class Ui_MainWindow(object):
         self.SignUpDirectionLabel.mousePressEvent = self.openSignUpWindow
 
         self.DontHaveAccountLabel2 = QtWidgets.QLabel(self.centralwidget)
-        self.DontHaveAccountLabel2.setGeometry(QtCore.QRect(480, 470, 121, 16))
+        self.DontHaveAccountLabel2.setGeometry(QtCore.QRect(430, 470, 121, 16))
         self.DontHaveAccountLabel2.setText("tıklayıp kayıt olabilirsiniz.")
 
         self.InvalidInfoLabel = QtWidgets.QLabel(self.centralwidget)
-        self.InvalidInfoLabel.setGeometry(QtCore.QRect(632, 360, 201, 21))
+        self.InvalidInfoLabel.setGeometry(QtCore.QRect(482, 360, 201, 21))
         self.InvalidInfoLabel.setText("Girilen bilgilere ait hesap bulunmamaktadır.")
         self.InvalidInfoLabel.setStyleSheet("color: rgb(255,0,0);")
         self.InvalidInfoLabel.setVisible(False)
 
         self.LoginScreenLabel = QtWidgets.QLabel(self.centralwidget)
-        self.LoginScreenLabel.setGeometry(QtCore.QRect(350, 110, 241, 91))
+        self.LoginScreenLabel.setGeometry(QtCore.QRect(300, 110, 241, 91))
         self.LoginScreenLabel.setText("Giriş Ekranı")
         self.LoginScreenLabel.setStyleSheet("color: rgb(0, 85, 255);\n"
 "font-size: 48px;")
 
         self.LoginButton = QtWidgets.QPushButton(self.centralwidget)
-        self.LoginButton.setGeometry(QtCore.QRect(630, 390, 111, 31))
+        self.LoginButton.setGeometry(QtCore.QRect(480, 390, 111, 31))
         self.LoginButton.setText("Giriş")
         self.LoginButton.setStyleSheet("font-size: 20px;\n"
 "border: 2px solid #000000;\n"

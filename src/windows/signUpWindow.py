@@ -154,7 +154,7 @@ class Ui_SignUpWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Sign Up"))
         self.EnterEmailLabel.setText(_translate("MainWindow", "E-mail gir:"))
         self.UsernameLabel.setText(_translate("MainWindow", "Kullanıcı Adı:"))
         self.PasswordLabel.setText(_translate("MainWindow", "Şifre:"))
@@ -170,8 +170,7 @@ class Ui_SignUpWindow(object):
 
 
     def updateUsernameInput(self, username: str):
-        if "@" not in username:
-            self.UsernameInput.setText(username.replace("@gmail.com", ""))
+        self.UsernameInput.setText(username.split("@")[0])
 
     def signUp(self, auth: Auth, db: Database):
         email = self.EmailInput.text()
@@ -205,6 +204,10 @@ class Ui_SignUpWindow(object):
                 self.ErrorLabel.setStyleSheet("color: rgb(0, 255, 0);")
                 self.ErrorLabel.setText("Hesabınız başarıyla oluşturuldu, şimdi giriş yapabilirsiniz.")
                 self.ErrorLabel.setVisible(True)
+                self.InvalidEmail.setVisible(False)
+                self.InvalidPassword1.setVisible(False)
+                self.InvalidPassword2.setVisible(False)
+                self.showPopup(email, username, password)
             except HTTPError as e:
                 self.InvalidEmail.setVisible(False)
                 self.InvalidPassword1.setVisible(False)
@@ -212,3 +215,13 @@ class Ui_SignUpWindow(object):
                 self.ErrorLabel.setText("Hata: " + json.loads(e.args[1])["error"]["message"])
                 self.ErrorLabel.setStyleSheet("color: rgb(255, 0, 0);")
                 self.ErrorLabel.setVisible(True)
+
+    def showPopup(self, email, username, password):
+        msg = QtWidgets.QMessageBox()
+        msg.resize(200, 150)
+        msg.setWindowTitle("Success!")
+        msg.setStyleSheet("background-color: rgb(255, 255, 127);")
+        msg.setText("Hesap Basariyla Olustuldu!")
+        msg.setStandardButtons(QtWidgets.QMessageBox.Close)
+        msg.setDetailedText("Eposta: " + email + "\nKullanıcı Adı: " + username + "\nŞifre: " + password)
+        msg.exec()

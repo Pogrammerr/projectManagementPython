@@ -15,19 +15,19 @@ from functions.rejectInvitation import rejectInvitation
 
 
 class Ui_InvitationFrame(object):
-    def acceptInvite(self, InvitationFrame, invitation, db):
+    def acceptInvite(self, InvitationFrame, invitation, db, updateDavetSayisi):
         result = acceptInvitation(db, invitation)
 
-        if result:
-            InvitationFrame.setVisible(False)
+        InvitationFrame.setVisible(False)
+        updateDavetSayisi(result)
 
-    def rejectInvite(self, InvitationFrame, invitation, db):
+    def rejectInvite(self, InvitationFrame, invitation, db, updateDavetSayisi):
         result = rejectInvitation(db, invitation)
 
-        if result:
-            InvitationFrame.setVisible(False)
+        InvitationFrame.setVisible(False)
+        updateDavetSayisi(result)
 
-    def setupUi(self, InvitationFrame, invitation, db):
+    def setupUi(self, InvitationFrame, invitation, db, updateDavetSayisi):
         InvitationFrame.setObjectName("InvitationFrame")
         InvitationFrame.resize(265, 72)
         InvitationFrame.setStyleSheet("background-color: rgb(255, 255, 127);")
@@ -50,12 +50,12 @@ class Ui_InvitationFrame(object):
         self.AcceptButton = QtWidgets.QPushButton(InvitationFrame)
         self.AcceptButton.setGeometry(QtCore.QRect(170, 10, 75, 23))
         self.AcceptButton.setObjectName("AcceptButton")
-        self.AcceptButton.clicked.connect(lambda: self.acceptInvite(InvitationFrame, invitation, db))
+        self.AcceptButton.clicked.connect(lambda: self.acceptInvite(InvitationFrame, invitation, db, updateDavetSayisi))
 
         self.RejectButton = QtWidgets.QPushButton(InvitationFrame)
         self.RejectButton.setGeometry(QtCore.QRect(170, 40, 75, 23))
         self.RejectButton.setObjectName("RejectButton")
-        self.RejectButton.clicked.connect(lambda: self.rejectInvite(db, invitation))
+        self.RejectButton.clicked.connect(lambda: self.rejectInvite(db, invitation, updateDavetSayisi))
 
         self.retranslateUi(InvitationFrame, invitation)
         QtCore.QMetaObject.connectSlotsByName(InvitationFrame)

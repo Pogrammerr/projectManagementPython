@@ -43,8 +43,11 @@ class Ui_AdminWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         
         self.ProfileTextLabel = QtWidgets.QLabel(self.centralwidget)
-        self.ProfileTextLabel.setGeometry(QtCore.QRect(100, 40, 151, 21))
+        self.ProfileTextLabel.setGeometry(QtCore.QRect(100, 40, 151, 15))
         self.ProfileTextLabel.setObjectName("ProfileTextLabel")
+
+        self.RoleLabel = QtWidgets.QLabel(self.centralwidget)
+        self.RoleLabel.setGeometry(QtCore.QRect(100, 60, 151, 15))
 
         self.TaskerrLabel = QtWidgets.QLabel(self.centralwidget)
         self.TaskerrLabel.setGeometry(QtCore.QRect(470, 30, 231, 51))
@@ -143,6 +146,7 @@ class Ui_AdminWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.ProfileTextLabel.setText(_translate("MainWindow", "Hoşgeldiniz, " + username))
+        self.RoleLabel.setText(_translate("MainWindow", "Rol: Admin"))
         self.TaskerrLabel.setText(_translate("MainWindow", "𝓣𝓪𝓼𝓴𝓮𝓻𝓻"))
         self.VersionLabel.setText(_translate("MainWindow", "v0.1"))
         self.InviteUserButton.setText(_translate("MainWindow", "Kullanıcıyı Davet Et"))

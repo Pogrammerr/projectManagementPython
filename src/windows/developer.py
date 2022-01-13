@@ -30,8 +30,11 @@ class Ui_DevWindow(object):
         self.ProfileLabel.setObjectName("ProfileLabel")
 
         self.ProfileTextLabel = QtWidgets.QLabel(self.centralwidget)
-        self.ProfileTextLabel.setGeometry(QtCore.QRect(80, 30, 151, 21))
+        self.ProfileTextLabel.setGeometry(QtCore.QRect(80, 30, 151, 15))
         self.ProfileTextLabel.setObjectName("ProfileTextLabel")
+
+        self.RoleLabel = QtWidgets.QLabel(self.centralwidget)
+        self.RoleLabel.setGeometry(QtCore.QRect(80, 50, 151, 15))
 
         self.TaskWaitingLabel1 = QtWidgets.QLabel(self.centralwidget)
         self.TaskWaitingLabel1.setGeometry(QtCore.QRect(30, 100, 211, 51))
@@ -60,7 +63,7 @@ class Ui_DevWindow(object):
 
         for task in userInfo["Tasks"]:
             self.TaskFrame = QtWidgets.QFrame(self.verticalLayoutWidget)
-            Ui_TaskDevFrame().setupUi(self.TaskFrame, task, storage, db)
+            Ui_TaskDevFrame().setupUi(self.TaskFrame, task, storage, db, self.updateTamamlananGorevSayisi)
             self.TasksLayout.addWidget(self.TaskFrame)
         
         self.InvitationsLabel1 = QtWidgets.QLabel(self.centralwidget)
@@ -84,7 +87,7 @@ class Ui_DevWindow(object):
 
         for invitation in userInfo["Invitations"]:
             self.InvitationFrame = QtWidgets.QFrame(self.verticalLayoutWidget_2)
-            Ui_InvitationFrame().setupUi(self.InvitationFrame, invitation, db)
+            Ui_InvitationFrame().setupUi(self.InvitationFrame, invitation, db, self.updateDavetSayisi)
             self.InvitationsLayout.addWidget(self.InvitationFrame)
 
         self.TaskerrLabel = QtWidgets.QLabel(self.centralwidget)
@@ -120,8 +123,8 @@ class Ui_DevWindow(object):
     def retranslateUi(self, MainWindow, username, beklenenGorevSayisi, davetSayisi, tamamlananGorevSayisi):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        usernameText = "Hoşgeldiniz, " + username
-        self.ProfileTextLabel.setText(_translate("MainWindow", usernameText))
+        self.ProfileTextLabel.setText(_translate("MainWindow", "Hoşgeldiniz, " + username))
+        self.RoleLabel.setText(_translate("MainWindow", "Rol: Personel"))
         self.TaskWaitingLabel1.setText(_translate("MainWindow", "Yapılmayı Bekleyen"))
         self.TaskWaitingLabel2.setText(_translate("MainWindow", str(beklenenGorevSayisi)))
         self.TaskWaitingLabel3.setText(_translate("MainWindow", "Göreviniz Var."))
@@ -130,3 +133,9 @@ class Ui_DevWindow(object):
         self.TaskerrLabel.setText(_translate("MainWindow", "𝓣𝓪𝓼𝓴𝓮𝓻𝓻"))
         self.VersionLabel.setText(_translate("MainWindow", "v0.1"))
         self.CompletedTasksLabel.setText(_translate("MainWindow", "Şu ana kadar " + str(tamamlananGorevSayisi) + " görev tamamladınız!"))
+
+    def updateDavetSayisi(self, yeniDavetSayisi):
+        self.InvitationsLabel2.setText(str(yeniDavetSayisi))
+
+    def updateTamamlananGorevSayisi(self, yeniGorevSayisi):
+        self.CompletedTasksLabel.setText("Şu ana kadar " + str(yeniGorevSayisi) + " görev tamamladınız!")

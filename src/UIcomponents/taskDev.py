@@ -15,17 +15,17 @@ from functions.uploadFile import uploadFile
 
 
 class Ui_TaskDevFrame(object):
-    def upload(self, task, storage, db):
+    def upload(self, task, storage, db, updateTamamlananGorevSayisi):
         self.UploadedFilesLabel.setVisible(False)
         self.StatusLabel.setText("Durum: Yükleniyor...")
-        result = uploadFile(task, storage, db)
+        result = uploadFile(task, storage, db, updateTamamlananGorevSayisi)
 
         if result:
             self.StatusLabel.setText("Durum: " + result["TaskStatus"])
             self.UploadedFilesLabel.setVisible(True)
             self.UploadedFilesLabel.mousePressEvent = lambda x: openURLs(result["TaskFileURLs"])        
 
-    def setupUi(self, TaskDevFrame, task, storage, db):
+    def setupUi(self, TaskDevFrame, task, storage, db, updateTamamlananGorevSayisi):
         TaskDevFrame.setObjectName("TaskDevFrame")
         TaskDevFrame.setStyleSheet("background-color: rgb(255, 255, 127);")
 
@@ -43,7 +43,7 @@ class Ui_TaskDevFrame(object):
         self.UploadFileButton.setGeometry(QtCore.QRect(270, 10, 101, 23))
         self.UploadFileButton.setStyleSheet("background-color: rgb(230, 230, 250);")
         self.UploadFileButton.setObjectName("UploadFileButton")
-        self.UploadFileButton.clicked.connect(lambda: self.upload(task, storage, db))
+        self.UploadFileButton.clicked.connect(lambda: self.upload(task, storage, db, updateTamamlananGorevSayisi))
 
         self.StatusLabel = QtWidgets.QLabel(TaskDevFrame)
         self.StatusLabel.setGeometry(QtCore.QRect(270, 40, 101, 16))
