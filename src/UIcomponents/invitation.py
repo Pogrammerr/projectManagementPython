@@ -55,7 +55,7 @@ class Ui_InvitationFrame(object):
         self.RejectButton = QtWidgets.QPushButton(InvitationFrame)
         self.RejectButton.setGeometry(QtCore.QRect(170, 40, 75, 23))
         self.RejectButton.setObjectName("RejectButton")
-        self.RejectButton.clicked.connect(lambda: self.rejectInvite(db, invitation, updateDavetSayisi))
+        self.RejectButton.clicked.connect(lambda: self.rejectInvite(InvitationFrame, invitation, db, updateDavetSayisi))
 
         self.retranslateUi(InvitationFrame, invitation)
         QtCore.QMetaObject.connectSlotsByName(InvitationFrame)
